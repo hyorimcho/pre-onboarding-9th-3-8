@@ -8,14 +8,35 @@ import {
   Bar,
   ComposedChart,
   ResponsiveContainer,
+  Cell,
 } from 'recharts';
 import CustomTooltip from '@/components/CustomTooltips';
 import { IChartProps } from '@/interface/props';
+import { useState } from 'react';
+import { Color } from '@/constants/colors';
+import { Category } from '@/interface/chartData';
 
-const Chart = ({ data, start, end }: IChartProps) => {
+const CATEGORY: Category[] = ['전체', 'area', 'bar'];
+
+const Chart = ({ data, start, end, district, handleClick }: IChartProps) => {
+  const [category, setCategory] = useState<Category>('전체');
+  const handleClickCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setCategory(e.currentTarget.textContent as Category);
+  };
   return (
     <>
       <h1>{`${start} ~ ${end}`}</h1>
+      <div className="btn-wrapper">
+        {CATEGORY.map((item) => (
+          <button
+            className={`${item === category ? 'btn-active' : 'btn'}`}
+            key={item}
+            onClick={handleClickCategory}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
       <div className="inner">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -43,19 +64,36 @@ const Chart = ({ data, start, end }: IChartProps) => {
               wrapperStyle={{ outline: 'none' }}
             />
             <Legend />
-            <Bar
-              yAxisId="left"
-              dataKey="value_bar"
-              fill="#868e96"
-              barSize={20}
-            />
-            <Area
-              yAxisId="right"
-              type="monotone"
-              dataKey="value_area"
-              stroke="#ff8787"
-              fill="#ffa8a8"
-            />
+            {category === '전체' || category === 'bar' ? (
+              <Bar
+                dataKey="value_bar"
+                barSize={20}
+                fill={Color.PALEPINK}
+                yAxisId="right"
+                onClick={(data) => handleClick(data.id)}
+              >
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={`${
+                      entry.id === district ? Color.PINK : Color.PALEPINK
+                    }`}
+                  />
+                ))}
+              </Bar>
+            ) : null}
+            {category === '전체' || category === 'area' ? (
+              <Area
+                type="monotone"
+                dataKey="value_area"
+                fill={Color.INDIGO}
+                stroke={Color.INDIGO}
+                yAxisId="left"
+                onClick={() => {
+                  handleClick(dot);
+                }}
+              />
+            ) : null}
           </ComposedChart>
         </ResponsiveContainer>
       </div>
