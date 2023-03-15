@@ -10,16 +10,18 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
-import CustomTooltip from '@/components/CustomTooltips';
+import CustomTooltip from '@/components/CustomTooltip';
 import { IChartProps } from '@/interface/props';
 import { useState } from 'react';
 import { Color } from '@/constants/colors';
-import { Category } from '@/interface/chartData';
+import CustomizedDot from './CustomizedDot';
 
+type Category = '전체' | 'area' | 'bar';
 const CATEGORY: Category[] = ['전체', 'area', 'bar'];
 
 const Chart = ({ data, start, end, district, handleClick }: IChartProps) => {
   const [category, setCategory] = useState<Category>('전체');
+  const [dot, setDot] = useState('');
   const handleClickCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
     setCategory(e.currentTarget.textContent as Category);
   };
@@ -60,7 +62,9 @@ const Chart = ({ data, start, end, district, handleClick }: IChartProps) => {
               label={{ value: 'value_area', position: 'top', offset: 20 }}
             />
             <Tooltip
-              content={<CustomTooltip />}
+              content={
+                <CustomTooltip active={false} payload={[]} setDot={setDot} />
+              }
               wrapperStyle={{ outline: 'none' }}
             />
             <Legend />
@@ -92,6 +96,15 @@ const Chart = ({ data, start, end, district, handleClick }: IChartProps) => {
                 onClick={() => {
                   handleClick(dot);
                 }}
+                dot={
+                  <CustomizedDot
+                    cx={0}
+                    cy={0}
+                    stroke={Color.YELLOW}
+                    district={district}
+                    payload={{ id: '', value_area: 0, value_bar: 0, date: '' }}
+                  />
+                }
               />
             ) : null}
           </ComposedChart>
