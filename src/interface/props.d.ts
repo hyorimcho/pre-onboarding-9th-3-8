@@ -4,8 +4,7 @@ export interface IChartProps {
   data: IChart[];
   start: string;
   end: string;
-  district: string;
-  handleClick: (value: string) => void;
+  chartDistrict: string[];
 }
 
 export interface IDotProps {
@@ -20,4 +19,15 @@ export interface IProps {
   active: boolean;
   payload: Payload[];
   setDot: Dispatch<React.SetStateAction<string>>;
+}
+
+export interface IDistrictProps {
+  chartDistrict: string[];
+  district: string;
+  handleDistrict: (value: string) => void;
+}
+
+export interface ICategoryProps {
+  category: string;
+  handleCategory: any;
 }

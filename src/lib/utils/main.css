@@ -1,24 +1,20 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 div.outer {
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 div.inner {
-  width: 90%;
-  height: 80vh;
-}
-
-div.tooltip {
-  background-color: white;
-  border: 1px solid lightgray;
-  padding: 4px 10px;
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 70%;
+  height: 60vh;
 }
 
 p.title {
@@ -42,14 +38,14 @@ span.area_value {
 }
 
 .custom-tooltip {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255);
   border-radius: 4px;
-  padding: 1px 10px 5px;
+  padding: 20px 5px 5px;
 }
 
 .custom-tooltip .tooltip-container {
   display: inline-block;
-  padding: 10px;
+  padding: 10px 20px;
 }
 
 .custom-tooltip .tooltip-container .tooltip-inner {
@@ -60,17 +56,52 @@ span.area_value {
 
 .custom-tooltip .tooltip-container .tooltip-inner .tooltip-content-value {
   font-weight: bold;
+  font-size: 16px;
 }
 
-.custom-tooltip
-  .tooltip-container
-  .tooltip-inner
-  .tooltip-content-value
-  .tooltip-content-datakey {
-  color: grey;
-  font-size: 10px;
+.custom-tooltip .tooltip-container .tooltip-inner .tooltip-content-datakey {
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .recharts-tooltip-wrapper:focus-visible {
   outline: none;
+}
+
+.btn-wrapper .btn {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: all 0.5s ease;
+  transform: translate(0, 0);
+  padding: 8px 20px;
+  margin: 4px;
+  min-width: 48px;
+  min-height: 32px;
+  -webkit-transform: translate(0, 0);
+  -webkit-transition: all 0.5s ease;
+}
+
+.btn-wrapper .btn:hover {
+  color: white;
+  background-color: #1b6ead;
+  transition: all 0.1s ease;
+  -webkit-transition: all 0.1s ease;
+}
+
+.btn-wrapper .btn-active {
+  color: white;
+  background-color: #1b6ead;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px 20px;
+  margin: 4px;
+  min-width: 48px;
+  min-height: 32px;
+  transform: translate(5px, 5px);
+  -webkit-transform: translate(1px, 1px);
 }

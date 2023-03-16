@@ -12,33 +12,48 @@ import {
 } from 'recharts';
 import CustomTooltip from '@/components/CustomTooltip';
 import { IChartProps } from '@/interface/props';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Color } from '@/constants/colors';
 import CustomizedDot from './CustomizedDot';
+import DistrictBtn from './DistrictBtn';
+import CategoryBtn from './CategoryBtn';
+import { Category } from '@/interface/chartData';
+import { useSearchParams } from 'react-router-dom';
 
-type Category = '전체' | 'area' | 'bar';
-const CATEGORY: Category[] = ['전체', 'area', 'bar'];
-
-const Chart = ({ data, start, end, district, handleClick }: IChartProps) => {
-  const [category, setCategory] = useState<Category>('전체');
+const Chart = ({ data, start, end, chartDistrict }: IChartProps) => {
   const [dot, setDot] = useState('');
-  const handleClickCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setCategory(e.currentTarget.textContent as Category);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const district = searchParams.get('district') as string;
+  const category = searchParams.get('category') as Category;
+
+  useEffect(() => {
+    if (!district && !category) {
+      searchParams.set('district', '전체');
+      searchParams.set('category', '전체');
+    }
+  }, []);
+
+  const handleDistrict = (value: string) => {
+    setSearchParams({ category, district: value });
   };
+
+  const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setSearchParams({
+      category: e.currentTarget.textContent as Category,
+      district,
+    });
+  };
+
   return (
     <>
-      <h1>{`${start} ~ ${end}`}</h1>
-      <div className="btn-wrapper">
-        {CATEGORY.map((item) => (
-          <button
-            className={`${item === category ? 'btn-active' : 'btn'}`}
-            key={item}
-            onClick={handleClickCategory}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
+      <h1>{district && category ? district : '전체'}</h1>
+      <h3>{`${start} ~ ${end}`}</h3>
+      <CategoryBtn category={category} handleCategory={handleCategory} />
+      <DistrictBtn
+        district={district}
+        chartDistrict={chartDistrict}
+        handleDistrict={handleDistrict}
+      />
       <div className="inner">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -74,7 +89,7 @@ const Chart = ({ data, start, end, district, handleClick }: IChartProps) => {
                 barSize={20}
                 fill={Color.PALEPINK}
                 yAxisId="right"
-                onClick={(data) => handleClick(data.id)}
+                onClick={(e) => handleDistrict(e.id)}
               >
                 {data.map((entry, index) => (
                   <Cell
@@ -94,7 +109,7 @@ const Chart = ({ data, start, end, district, handleClick }: IChartProps) => {
                 stroke={Color.INDIGO}
                 yAxisId="left"
                 onClick={() => {
-                  handleClick(dot);
+                  handleDistrict(dot);
                 }}
                 dot={
                   <CustomizedDot
