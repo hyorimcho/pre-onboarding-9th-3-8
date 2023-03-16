@@ -20,7 +20,8 @@ const useChart = () => {
     getCharts();
   }, []);
 
-  const chartDistrict = [...new Set(charts.map((chart) => chart.id))];
+  // const chartDistrict = [...new Set(charts.map((chart) => chart.id))];
+  const chartDistrict = Array.from(new Set(charts.map((chart) => chart.id)));
 
   return { charts, chartDistrict, start, end };
 };
